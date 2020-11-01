@@ -1,0 +1,16 @@
+variables.json
+*.tfstate
+*.tfstate.*.backup
+*.tfstate.backup
+*.tfvars
+.terraform/
+*.lock.info
+*.retry
+.vagrant/
+*.log
+*.pyc
+.molecule
+.cache
+.pytest_cache
+*.lock
+Pipfile

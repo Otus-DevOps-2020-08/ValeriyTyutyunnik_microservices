@@ -1,0 +1,10 @@
+{
+  "folder_id": "<folder_id>",
+  "service_account_key_file": "path_to_key.json",
+  "source_image_family": "ubuntu-1604-lts",
+  "platform_id": "standard-v1",
+  "ssh_username": "user",
+  "preemtible": "false",
+  "zone": "ru-central1-a",
+  "pwd": "source_path"
+}
