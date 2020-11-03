@@ -1,0 +1,2 @@
+image_to_run: allien/otus-reddit:1.0
+container_name: reddit-app

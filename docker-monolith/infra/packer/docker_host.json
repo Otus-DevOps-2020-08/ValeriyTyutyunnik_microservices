@@ -1,0 +1,23 @@
+{
+    "builders": [
+        {
+            "type": "yandex",
+            "use_ipv4_nat": "true",
+            "service_account_key_file": "{{ user `service_account_key_file` }}",
+            "folder_id": "{{ user `folder_id` }}",
+            "source_image_family": "{{ user `source_image_family` }}",
+            "image_family": "docker-host",
+            "image_name": "docker-host-{{timestamp}}",
+            "ssh_username": "{{ user `ssh_username` }}",
+            "platform_id": "{{ user `platform_id` }}",
+            "preemptible": "{{ user `preemtible` }}",
+            "zone": "{{ user `zone` }}"
+        }
+    ],
+    "provisioners": [
+        {
+         "type": "ansible",
+         "playbook_file": "ansible/playbooks/docker.yml"
+        }
+    ]
+}
