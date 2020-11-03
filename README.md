@@ -19,3 +19,18 @@ terraform apply -auto-approve
 # из директории docker-monolith/infra/ansible
 ansansible-playbook -i environments/dynamic_inventory.py playbooks/deploy.yml
 ```
+
+## docker-3
+
+1. Запуск микросервисов в докере
+2. Использование hadolint через контейнер докера
+```
+docker run --rm -i hadolint/hadolint < Dockerfile
+```
+3. Запуск сети докер контейнеров с другими алиасами и переменными окружения (без изменения Dockerfile) через опцию --env (--e)
+```
+docker run -d --network=reddit --network-alias=post_db2 --network-alias=comment_db mongo:latest
+docker run -d --network=reddit --network-alias=post2 -e POST_DATABASE_HOST=post_db2 allien/post:1.0
+docker run -d --network=reddit --network-alias=comment2 -e COMMENT_DATABASE_HOST=comment2 allien/comment:1.0
+docker run -d --network=reddit -p 9292:9292 -e POST_SERVICE_HOST=post2 -e COMMENT_SERVICE_HOST=comment2 allien/ui:1.0
+```
