@@ -8,7 +8,7 @@ services:
       - back_net
   ui:
     build: ./ui
-    image: ${USERNAME?USERNAME variable unset}/ui:${VERSION_UI}
+    image: ${DOCKERHUB_NAME}/ui:${VERSION_UI}
     ports:
       - ${PORT_UI:-9292}:9292/tcp
     networks:
@@ -16,12 +16,12 @@ services:
       - back_net
   post:
     build: ./post-py
-    image: ${USERNAME?USERNAME variable unset}/post:${VERSION_POST}
+    image: ${DOCKERHUB_NAME}/post:${VERSION_POST}
     networks:
       - back_net
   comment:
     build: ./comment
-    image: ${USERNAME?USERNAME variable unset}/comment:${VERSION_COMMENT}
+    image: ${DOCKERHUB_NAME}/comment:${VERSION_COMMENT}
     networks:
       - back_net
 
