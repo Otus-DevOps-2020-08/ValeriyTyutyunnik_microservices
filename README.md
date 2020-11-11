@@ -54,3 +54,8 @@ docker-compose -p <name> up -d
 docker-compose -p <name> down
 ```
 Либо установить переменную окружения COMPOUSE_PROJECT_NAME через export или в .env файле
+
+3. Override compouse конфиг
+```
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+```
