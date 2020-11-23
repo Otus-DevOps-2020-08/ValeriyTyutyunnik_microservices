@@ -9,8 +9,15 @@ stages:
 
 build_job:
   stage: build
+  image: docker:stable-dind
+  before_script:
+    - docker info
+    - docker login -u ${DOCKERHUB_LOGIN} -p ${DOCKERHUB_PWD}
   script:
-    - echo 'Building'
+    - docker build -t ${DOCKERHUB_LOGIN}/otus-reddit${CI_COMMIT_BRANCH}_${CI_COMMIT_SHORT_SHA} ./reddit
+    - docker push ${DOCKERHUB_LOGIN}/otus-reddit${CI_COMMIT_BRANCH}_${CI_COMMIT_SHORT_SHA}
+  after_script:
+    - docker images
 
 variables:
   DATABASE_URL: 'mongo:27017'
@@ -67,7 +74,7 @@ production:
   only:
     - /^\d+\.\d+\.\d+/
   script:
-    - echo'Deploy'
+    - echo 'Deploy'
   environment:
     name: production
     url: http://example.com
