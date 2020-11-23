@@ -1,0 +1,15 @@
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: 'gitlab.example.com'
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      external_url 'http://84.201.128.90'
+  ports:
+    - '80:80'
+    - '443:443'
+    - '2222:22'
+  volumes:
+    - '/src/gitlab/config:/etc/gitlab'
+    - '/src/gitlab/logs:/var/log/gitlab'
+    - '/src/gitlab/data:/var/opt/gitlab'
