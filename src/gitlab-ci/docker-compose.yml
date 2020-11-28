@@ -1,0 +1,36 @@
+version: '3.3'
+services:
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    container_name: gitlab_runner
+    restart: always
+    privileged: true
+    depends_on:
+      - register-runner
+    volumes:
+      - runner_conf:/etc/gitlab-runner/
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  register-runner:
+    restart: 'no'
+    image: gitlab/gitlab-runner:alpine
+    privileged: true
+    volumes:
+      - runner_conf:/etc/gitlab-runner/
+    command:
+      - register
+      - --run-untagged
+      - --non-interactive
+      - --locked=false
+      - --name=docker runner
+      - --tag-list=linux,xenial,ubuntu,docker
+      - --executor=docker
+      - --docker-image=alpine:latest
+      - --docker-volumes=docker-certs-client:/certs/client
+      - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - CI_SERVER_URL=$CI_SERVER_URL
+      - REGISTRATION_TOKEN=$REGISTRATION_TOKEN
+
+volumes:
+  runner_conf:
