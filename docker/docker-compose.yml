@@ -63,6 +63,13 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
 
+  mongodb-exporter:
+    image: bitnami/mongodb-exporter:0.11.2-debian-10-r56
+    environment:
+      MONGODB_URI: 'mongodb://post_db:27017'
+    networks:
+      - back_net
+
 volumes:
   post_db:
   prometheus_data:
