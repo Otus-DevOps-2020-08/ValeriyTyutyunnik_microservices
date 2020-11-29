@@ -59,3 +59,33 @@ docker-compose -p <name> down
 ```
 docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 ```
+
+## gitlab-ci
+
+1. Развернут gitlab из контейнера
+
+Запуск привелигерованного раннера в контейнере:
+```
+docker run -d --name gitlab-runner --restart always \
+  -v /srv/gitlab-runner/config:/etc/gitlab-runner \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  gitlab/gitlab-runner:latest
+
+docker exec -it gitlab-runner gitlab-runner register \
+      --run-untagged \
+      --locked=false \
+      --non-interactive \
+      --url http://<SERVER_IP>/ \
+      --registration-token <GITLAB_RUNNER_TOKEN> \
+      --description "docker-runner" \
+      --tag-list "linux,xenial,ubuntu,docker" \
+      --executor docker   \
+      --docker-image "alpine:latest" \
+      --docker-privileged \
+      --docker-volumes "docker-certs-client:/certs/client" \
+      --env "DOCKER_DRIVER=overlay2"
+```
+2. В src/gitlab-ci docker-compouse для запуска раннера с регистраций. Токен и url указываются в .env файле (или переменных окружения системы)
+3. Настройка нотификаций в Slack из гитлаба:
+- В слаке добавить интеграции с Incoming WebHooks в чате, скопировать ссылку.
+- В гиталбе Settings -> Integrations -> Slack notifications -> включить нотификации на нужные события и ссылку нотификации
