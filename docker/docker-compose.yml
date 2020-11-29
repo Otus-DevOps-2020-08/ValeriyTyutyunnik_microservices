@@ -5,28 +5,52 @@ services:
     volumes:
       - post_db:/data/db
     networks:
-      - back_net
+      back_net:
+        aliases:
+          - post_db
+          - comment_db
+
   ui:
-    build: ./ui
     image: ${DOCKERHUB_NAME}/ui:${VERSION_UI}
     ports:
       - ${PORT_UI:-9292}:9292/tcp
     networks:
       - front_net
       - back_net
+    depends_on:
+      - post
+      - comment
+
   post:
-    build: ./post-py
     image: ${DOCKERHUB_NAME}/post:${VERSION_POST}
     networks:
       - back_net
+    depends_on:
+      - post_db
+
   comment:
-    build: ./comment
     image: ${DOCKERHUB_NAME}/comment:${VERSION_COMMENT}
     networks:
       - back_net
+    depends_on:
+      - post_db
+
+  prometheus:
+    image: ${DOCKERHUB_NAME}/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+    networks:
+      - back_net
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=1d'
 
 volumes:
   post_db:
+  prometheus_data:
 
 networks:
   front_net:
