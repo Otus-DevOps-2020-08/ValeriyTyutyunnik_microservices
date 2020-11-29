@@ -1,8 +1,4 @@
-#SHELL=/bin/sh
 USER_NAME=allien
-
-#include ./docker/.env
-#export
 
 build_all: build_comment build_ui build_post build_prometheus
 
