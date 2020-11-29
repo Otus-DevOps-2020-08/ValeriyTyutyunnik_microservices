@@ -15,15 +15,15 @@ eval $(docker-machine env docker-host)
 ```
 
 3. Создан прототип инфраструктуры под докер: создание образа с установленным docker через packer, поднятие инстансов через терраформ, запуск контейнера через ansible
-4. Ansible можно запустить через vagrant (Vagrantfile в директории docker-monolith/infra/ansible)
+4. Ansible можно запустить через vagrant (Vagrantfile в директории docker/docker-monolith/infra/ansible)
 ```
-# Из директории docker-monolith/infra
+# Из директории docker/docker-monolith/infra
 packer build -var-file=packer/variables.json packer/docker_host.json
 
-# docker-monolith/infra/terraform
+# docker/docker-monolith/infra/terraform
 terraform apply -auto-approve
 
-# из директории docker-monolith/infra/ansible
+# из директории docker/docker-monolith/infra/ansible
 ansible-playbook -i environments/dynamic_inventory.py playbooks/deploy.yml
 ```
 
