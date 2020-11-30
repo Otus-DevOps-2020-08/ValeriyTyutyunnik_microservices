@@ -15,15 +15,15 @@ eval $(docker-machine env docker-host)
 ```
 
 3. Создан прототип инфраструктуры под докер: создание образа с установленным docker через packer, поднятие инстансов через терраформ, запуск контейнера через ansible
-4. Ansible можно запустить через vagrant (Vagrantfile в директории docker-monolith/infra/ansible)
+4. Ansible можно запустить через vagrant (Vagrantfile в директории docker/docker-monolith/infra/ansible)
 ```
-# Из директории docker-monolith/infra
+# Из директории docker/docker-monolith/infra
 packer build -var-file=packer/variables.json packer/docker_host.json
 
-# docker-monolith/infra/terraform
+# docker/docker-monolith/infra/terraform
 terraform apply -auto-approve
 
-# из директории docker-monolith/infra/ansible
+# из директории docker/docker-monolith/infra/ansible
 ansible-playbook -i environments/dynamic_inventory.py playbooks/deploy.yml
 ```
 
@@ -89,3 +89,9 @@ docker exec -it gitlab-runner gitlab-runner register \
 3. Настройка нотификаций в Slack из гитлаба:
 - В слаке добавить интеграции с Incoming WebHooks в чате, скопировать ссылку.
 - В гиталбе Settings -> Integrations -> Slack notifications -> включить нотификации на нужные события и ссылку нотификации
+
+## monitoring-1
+
+1. Запущен Prometheus
+2. Настроен мониторинг в Prometheus для микросервисов reddit, хоста и мониторинг через blackbox
+3. Создан Makefile для сборки контейнеров и их последующего пуша в Dockerhub. По умолчанию проиходит только сборка контейнеров, если что-то изменилось в исходниках контейнеров.

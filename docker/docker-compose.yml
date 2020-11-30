@@ -1,0 +1,94 @@
+version: '3.3'
+services:
+
+  post_db:
+    image: mongo:${VERSION_MONGO}
+    volumes:
+      - post_db:/data/db
+    networks:
+      back_net:
+        aliases:
+          - post_db
+          - comment_db
+
+  ui:
+    image: ${DOCKERHUB_NAME}/ui:${VERSION_UI}
+    ports:
+      - ${PORT_UI:-9292}:9292/tcp
+    networks:
+      - front_net
+      - back_net
+    depends_on:
+      - post
+      - comment
+
+  post:
+    image: ${DOCKERHUB_NAME}/post:${VERSION_POST}
+    networks:
+      - back_net
+    depends_on:
+      - post_db
+
+  comment:
+    image: ${DOCKERHUB_NAME}/comment:${VERSION_COMMENT}
+    networks:
+      - back_net
+    depends_on:
+      - post_db
+
+  prometheus:
+    image: ${DOCKERHUB_NAME}/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus_data:/prometheus
+    networks:
+      - back_net
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention=1d'
+
+  node-exporter:
+    image: prom/node-exporter:v0.15.2
+    user: root
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - back_net
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+
+  mongodb-exporter:
+    image: bitnami/mongodb-exporter:0.11.2-debian-10-r56
+    environment:
+      MONGODB_URI: 'mongodb://post_db:27017'
+    networks:
+      - back_net
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.18.0
+    ports:
+      - 9115:9115
+    networks:
+      - back_net
+
+volumes:
+  post_db:
+  prometheus_data:
+
+networks:
+  front_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET_FRONT}
+  back_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET_BACK}
