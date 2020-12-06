@@ -21,6 +21,13 @@ services:
     depends_on:
       - post
       - comment
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.ui
 
   post:
     image: ${DOCKERHUB_NAME}/post:${VERSION_POST}
@@ -28,6 +35,13 @@ services:
       - back_net
     depends_on:
       - post_db
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: service.post
 
   comment:
     image: ${DOCKERHUB_NAME}/comment:${VERSION_COMMENT}
@@ -35,6 +49,8 @@ services:
       - back_net
     depends_on:
       - post_db
+    environment:
+      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
 
   prometheus:
     image: ${DOCKERHUB_NAME}/prometheus
