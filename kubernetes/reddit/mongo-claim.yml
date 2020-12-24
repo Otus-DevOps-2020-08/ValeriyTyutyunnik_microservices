@@ -9,4 +9,4 @@ spec:
   resources:
     requests:
       storage: 4Gi
-  volumeName: mongo-pd-storage
+  volumeName: mongo--yc-pd-storage
