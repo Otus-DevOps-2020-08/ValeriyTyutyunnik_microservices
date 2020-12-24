@@ -32,4 +32,6 @@ spec:
       volumes:
       - name: mongo-persistent-storage
         persistentVolumeClaim:
-          claimName:  mongo-pvc
+          # claimName:  mongo-pvc
+          # mongo-pvc - это правильное имя. Изменено из-за устаревшего теста
+          claimName:  mongo-gce-pd-storage
