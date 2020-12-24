@@ -30,8 +30,6 @@ spec:
         - name: mongo-persistent-storage
           mountPath: /data/db
       volumes:
-      - name: mongo-persistent-storage
+      - name: mongo-gce-persistent-storage
         persistentVolumeClaim:
-          # claimName:  mongo-pvc
-          # mongo-pvc - это правильное имя. Изменено из-за устаревшего теста
-          claimName:  mongo-gce-pd-storage
+          claimName:  mongo-pvc
