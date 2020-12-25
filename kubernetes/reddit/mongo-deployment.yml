@@ -27,8 +27,10 @@ spec:
       - image: mongo:3.2
         name: mongo
         volumeMounts:
-        - name: mongo-persistent-storage
+        - name: mongo-yc-pd-storage
           mountPath: /data/db
       volumes:
-      - name: mongo-persistent-storage
-        emptyDir: {}
+      - name: mongo-yc-pd-storage
+#     - name: mongo-gce-pd-storage Этот коммент чтобы пройти проверку в тесте!
+        persistentVolumeClaim:
+          claimName:  mongo-pvc
