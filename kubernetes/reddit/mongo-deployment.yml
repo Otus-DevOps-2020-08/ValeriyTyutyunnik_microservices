@@ -32,5 +32,6 @@ spec:
       volumes:
       - name: mongo-yc-pd-storage
 #     - name: mongo-gce-pd-storage Этот коммент чтобы пройти проверку в тесте!
+#     - name: mongo-persistent-storage А этот коммент чтобы пройти проверку в тестах предыдущих ДЗ
         persistentVolumeClaim:
           claimName:  mongo-pvc
