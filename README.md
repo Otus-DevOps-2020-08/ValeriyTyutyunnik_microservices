@@ -100,3 +100,9 @@ docker exec -it gitlab-runner gitlab-runner register \
 
 1. Развернут EFK стек для логгирования
 2. Развернута система распределенной трассировки Zipkin
+
+
+Развернуть Ingress Controller в YC
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml
+```
