@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx-ingress-sa
+  namespace: nginx-ingress
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: nginx-ingress-cr
+rules:
+- apiGroups:
+  - ""
+  resources: ["configmaps","secrets","endpoints","events","services"]
+  verbs: ["get","list","watch","create","update","delete","patch"]
+- apiGroups:
+  - ""
+  - "extensions"
+  resources: ["services","nodes","ingresses","pods","ingresses/status"]
+  verbs: ["get","list","watch","create","update","delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: nginx-ingress
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nginx-ingress-cr
+subjects:
+  - kind: ServiceAccount
+    name: nginx-ingress-sa
+    namespace: nginx-ingress

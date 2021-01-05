@@ -15,8 +15,11 @@ spec:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
     spec:
+      serviceAccountName: nginx-ingress-sa
+      hostNetwork: true
+      terminationGracePeriodSeconds: 60
       containers:
-      - image: gcr.io/google_containers/nginx-ingress-controller:0.9.0-beta.11
+      - image: gcr.io/google_containers/nginx-ingress-controller:0.9.0-beta.15
         name: nginx
         imagePullPolicy: Always
         env:

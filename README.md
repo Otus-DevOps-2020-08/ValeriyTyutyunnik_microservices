@@ -102,7 +102,20 @@ docker exec -it gitlab-runner gitlab-runner register \
 2. Развернута система распределенной трассировки Zipkin
 
 
-Развернуть Ingress Controller в YC
+## kubernetes
+Развернуть Nginx-Ingress Controller в YC
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/cloud/deploy.yaml
+```
+Установить tiller (helm2)
+```
+cd kubernetes/Charts
+kubectl apply -f tiller.yml
+helm init --service-account tiller
+```
+
+Развернуть gitlab
+```
+cd kubernetes/Charts/gitlab-omnibus
+helm install --name gitlab . -f values.yaml
 ```
